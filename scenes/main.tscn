@@ -6100,3 +6100,4 @@ script = ExtResource("1_0wfyh")
 tile_set = SubResource("TileSet_q2x4p")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2084515810]
+position = Vector2(320, 160)
