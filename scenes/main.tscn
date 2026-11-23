@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://c3jr2yuaga5ai"]
 
-[ext_resource type="Script" uid="uid://dgywwhv4uvmba" path="res://scenes/main.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://dgywwhv4uvmba" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://3pm3lwy7fxrs" path="res://assets/dirt.png" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dcalyfdbvs4i1" path="res://scenes/player.tscn" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://dpj5d7oqs8y2w" path="res://scripts/player.gd" id="3_jyhfs"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wfyh"]
 texture = ExtResource("1_o5qli")
@@ -6098,6 +6100,10 @@ script = ExtResource("1_0wfyh")
 
 [node name="Ground" type="TileMapLayer" parent="." unique_id=2004734401]
 tile_set = SubResource("TileSet_q2x4p")
+
+[node name="Player" parent="." unique_id=1271989903 node_paths=PackedStringArray("ground") instance=ExtResource("2_sugp2")]
+script = ExtResource("3_jyhfs")
+ground = NodePath("../Ground")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2084515810]
 position = Vector2(320, 160)
