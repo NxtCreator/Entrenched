@@ -17,14 +17,14 @@ func get_direction() -> Vector2i:
 		direction = Vector2i.DOWN
 	return direction
 	
-func update_position(cell):
+func update_position() -> void:
 	position = ground.map_to_local(cell)
 
 	
 
 func _ready() -> void:
 	cell = Vector2i(0, -1)
-	update_position(cell)
+	update_position()
 	
 	
 	
@@ -35,8 +35,11 @@ func _process(delta: float) -> void:
 	var direction = get_direction()
 	if direction != Vector2i.ZERO:
 		cooldown = MOVE_DELAY
-		print(direction)
-	
-	
-
-	
+		
+		var target = cell + direction
+		if ground.get_cell_source_id(target) == -1:
+			cell = target
+			update_position()
+		ground.erase_cell(target)
+		cell = target
+		update_position()
