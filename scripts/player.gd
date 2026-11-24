@@ -3,6 +3,7 @@ extends Node2D
 @export var ground: TileMapLayer
 var cooldown := 0.0
 const MOVE_DELAY := 0.12
+var cell: Vector2i 
 
 func get_direction() -> Vector2i:
 	var direction = Vector2i.ZERO
@@ -15,11 +16,16 @@ func get_direction() -> Vector2i:
 	elif Input.is_action_pressed("ui_down"):
 		direction = Vector2i.DOWN
 	return direction
+	
+func update_position(cell):
+	position = ground.map_to_local(cell)
 
 	
 
 func _ready() -> void:
-	position = ground.map_to_local(Vector2i(0, -1))
+	cell = Vector2i(0, -1)
+	update_position(cell)
+	
 	
 	
 func _process(delta: float) -> void:
