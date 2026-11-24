@@ -4,6 +4,7 @@ extends Node2D
 var cooldown := 0.0
 const MOVE_DELAY := 0.12
 var cell: Vector2i 
+const TOP_ROW := -1
 
 func get_direction() -> Vector2i:
 	var direction = Vector2i.ZERO
@@ -40,7 +41,7 @@ func _process(delta: float) -> void:
 		var world_rect = ground.get_used_rect()
 		var right_edge = world_rect.position.x + world_rect.size.x - 1
 		var left_edge = world_rect.position.x
-		if target.x < left_edge or target.x > right_edge:
+		if target.x < left_edge or target.x > right_edge or target.y < TOP_ROW:
 			return
 			
 		if ground.get_cell_source_id(target) != -1:
