@@ -37,9 +37,15 @@ func _process(delta: float) -> void:
 		cooldown = MOVE_DELAY
 		
 		var target = cell + direction
-		if ground.get_cell_source_id(target) == -1:
-			cell = target
-			update_position()
-		ground.erase_cell(target)
+		var world_rect = ground.get_used_rect()
+		var right_edge = world_rect.position.x + world_rect.size.x - 1
+		var left_edge = world_rect.position.x
+		if target.x < left_edge or target.x > right_edge:
+			return
+			
+		if ground.get_cell_source_id(target) != -1:
+			ground.erase_cell(target)
+			
+			
 		cell = target
 		update_position()
