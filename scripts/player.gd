@@ -3,6 +3,10 @@ extends Node2D
 @export var ground: TileMapLayer
 var cooldown := 0.0
 const MOVE_DELAY := 0.12
+const FALL_DELAY := 0.06
+var fall_cooldown = 0.0
+const SAFE_FALL := 3
+var fall_count := 0
 var cell: Vector2i 
 const TOP_ROW := -1
 
@@ -20,19 +24,26 @@ func get_direction() -> Vector2i:
 	
 func update_position() -> void:
 	position = ground.map_to_local(cell)
-
 	
+func is_empty(c: Vector2i) -> bool:
+	return ground.get_cell_source_id(c) == -1
+
 
 func _ready() -> void:
 	cell = Vector2i(0, -1)
 	update_position()
-	
-	
-	
+
+
 func _process(delta: float) -> void:
 	cooldown -= delta
+	fall_cooldown -= delta
 	if cooldown > 0:
 		return
+	var below = cell + Vector2i.DOWN
+	if is_empty(below):
+		fall_cooldown = FALL_DELAY
+		cell += Vector2i.DOWN
+		update_position()
 	var direction = get_direction()
 	if direction != Vector2i.ZERO:
 		cooldown = MOVE_DELAY

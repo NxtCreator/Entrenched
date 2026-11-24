@@ -6106,4 +6106,6 @@ script = ExtResource("3_jyhfs")
 ground = NodePath("../Ground")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2084515810]
+texture_filter = 1
 position = Vector2(320, 160)
+zoom = Vector2(1.5, 1.5)
