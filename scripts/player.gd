@@ -1,14 +1,22 @@
 extends Node2D
-
 @export var ground: TileMapLayer
-var cooldown := 0.0
+
 const MOVE_DELAY := 0.12
 const FALL_DELAY := 0.06
-var fall_cooldown = 0.0
 const SAFE_FALL := 3
-var fall_count := 0
-var cell: Vector2i 
 const TOP_ROW := -1
+
+var cooldown := 0.0
+var fall_count := 0
+var is_dead := false
+var cell: Vector2i
+
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	$Polygon2D.color = Color.RED
+	print("you died, press R") 
 
 func get_direction() -> Vector2i:
 	var direction = Vector2i.ZERO
@@ -35,15 +43,29 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if is_dead:
+		if Input.is_action_just_pressed("restart"):
+			get_tree().reload_current_scene()
+		return
+		
 	cooldown -= delta
-	fall_cooldown -= delta
 	if cooldown > 0:
 		return
-	var below = cell + Vector2i.DOWN
-	if is_empty(below):
-		fall_cooldown = FALL_DELAY
+		
+	# Gravity
+	if is_empty(cell + Vector2i.DOWN):
+		cooldown = FALL_DELAY
 		cell += Vector2i.DOWN
+		fall_count += 1
 		update_position()
+		return
+		
+	# landed: was the fall too long?
+	if fall_count > SAFE_FALL:
+		die()
+		return
+	fall_count = 0
+	
 	var direction = get_direction()
 	if direction != Vector2i.ZERO:
 		cooldown = MOVE_DELAY
