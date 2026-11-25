@@ -5,11 +5,16 @@ const MOVE_DELAY := 0.12
 const FALL_DELAY := 0.06
 const SAFE_FALL := 3
 const TOP_ROW := -1
+const DIRT := 0
+const LADDER := 1
 
 var cooldown := 0.0
 var fall_count := 0
 var is_dead := false
 var cell: Vector2i
+
+func is_ladder(c: Vector2i) -> bool:
+	return ground.get_cell_source_id(c) == LADDER
 
 func die() -> void:
 	if is_dead:
@@ -53,7 +58,7 @@ func _process(delta: float) -> void:
 		return
 		
 	# Gravity
-	if is_empty(cell + Vector2i.DOWN):
+	if is_empty(cell + Vector2i.DOWN) and not is_ladder(cell):
 		cooldown = FALL_DELAY
 		cell += Vector2i.DOWN
 		fall_count += 1
@@ -66,6 +71,7 @@ func _process(delta: float) -> void:
 		return
 	fall_count = 0
 	
+	# input
 	var direction = get_direction()
 	if direction != Vector2i.ZERO:
 		cooldown = MOVE_DELAY
@@ -76,10 +82,13 @@ func _process(delta: float) -> void:
 		var left_edge = world_rect.position.x
 		if target.x < left_edge or target.x > right_edge or target.y < TOP_ROW:
 			return
+		# going up into empty air: leave a ladder behind in the cell you're leaving
+		if direction == Vector2i.UP and is_empty(target) and not is_ladder(cell):
+			ground.set_cell(cell, LADDER, Vector2i(0, 0))
 			
-		if ground.get_cell_source_id(target) != -1:
+		# dig dirt, but walk through ladders
+		if not is_empty(target) and not is_ladder(target):
 			ground.erase_cell(target)
-			
 			
 		cell = target
 		update_position()

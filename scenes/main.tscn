@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3pm3lwy7fxrs" path="res://assets/dirt.png" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://dcalyfdbvs4i1" path="res://scenes/player.tscn" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://dpj5d7oqs8y2w" path="res://scripts/player.gd" id="3_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://bu3brhhjgsx37" path="res://assets/ladder.png" id="3_tbgi4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wfyh"]
 texture = ExtResource("1_o5qli")
@@ -6092,8 +6093,13 @@ texture = ExtResource("1_o5qli")
 76:77/0 = 0
 77:77/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tefeu"]
+texture = ExtResource("3_tbgi4")
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_q2x4p"]
 sources/0 = SubResource("TileSetAtlasSource_0wfyh")
+sources/1 = SubResource("TileSetAtlasSource_tefeu")
 
 [node name="Main" type="Node2D" unique_id=1343634054]
 script = ExtResource("1_0wfyh")
