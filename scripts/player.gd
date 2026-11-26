@@ -6,9 +6,32 @@ const  SPEED := 55.0
 const GRAVITY := 420.0
 const MAX_FALL := 260.0
 const DIG_DELAY := 0.3
+const CLIMB_SPEED := 70.0
 
+var stepping := false
+var climb_target := 0.0
 var hold_time := 0.0
 var last_dir := Vector2i.ZERO
+
+func _on_ladder() -> bool:
+	var cell := ground.local_to_map(ground.to_local(global_position))
+	return ground.get_cell_source_id(cell) == 1 or ground.get_cell_source_id(cell + Vector2i.DOWN) == 1
+	
+func _climb() -> void:
+	velocity.y = 0.0
+	var cell := ground.local_to_map(ground.to_local(global_position))
+	if stepping:
+		velocity.y = -CLIMB_SPEED
+		if global_position.y <= climb_target:
+			global_position.y = climb_target
+			stepping = false
+			velocity.y = 0.0
+	elif Input.is_action_just_pressed("ui_up"):
+		var above := cell + Vector2i.UP
+		var src_above := ground.get_cell_source_id(above)
+		if src_above != 0 and (src_above == 1 or ground.get_cell_source_id(cell) == 1):
+			climb_target = ground.to_global(ground.map_to_local(above)).y
+			stepping = true
 
 func _dig_dir() -> Vector2i:
 	if Input.is_action_pressed("ui_down"): return Vector2i.DOWN
@@ -35,8 +58,11 @@ func _dig(delta: float) -> void:
 		hold_time = 0.0
 	
 func _physics_process(delta: float) -> void:
-	var dir := Input.get_axis("ui_left", "ui_right")
-	velocity.y  = min(velocity.y + GRAVITY * delta, MAX_FALL)
+	if _on_ladder() or stepping:
+		_climb()
+	else:
+		velocity.y  = min(velocity.y + GRAVITY * delta, MAX_FALL)
+		
 	if Input.is_action_pressed("ui_down"):
 		var col := ground.local_to_map(ground.to_local(global_position)).x
 		var center_x := ground.to_global(ground.map_to_local(Vector2i(col, 0))).x
