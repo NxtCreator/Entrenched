@@ -1,6 +1,17 @@
 [gd_scene format=3 uid="uid://dcalyfdbvs4i1"]
 
-[node name="Player" type="Node2D" unique_id=1271989903]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_62jd7"]
+size = Vector2(12, 12)
+
+[node name="Player" type="CharacterBody2D" unique_id=634688996]
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1887063949]
 polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=724972775]
+shape = SubResource("RectangleShape2D_62jd7")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=517018494]
+limit_left = 0
+limit_top = -80
+limit_right = 640
