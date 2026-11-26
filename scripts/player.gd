@@ -30,10 +30,14 @@ func _dig(delta: float) -> void:
 	if dig_time >= DIG_TIME:
 		ground.erase_cell(cell)
 		dig_time = 0.0
-
 func _physics_process(delta: float) -> void:
 	var dir := Input.get_axis("ui_left", "ui_right")
 	velocity.y  = min(velocity.y + GRAVITY * delta, MAX_FALL)
-	velocity.x = dir * SPEED
+	if Input.is_action_pressed("ui_down"):
+		var col := ground.local_to_map(ground.to_local(global_position)).x
+		var center_x := ground.to_global(ground.map_to_local(Vector2i(col, 0))).x
+		velocity.x = clampf((center_x - global_position.x) * 12.0, -SPEED, SPEED)
+	else:
+		velocity.x = Input.get_axis("ui_left", "ui_right") * SPEED
 	move_and_slide()
 	_dig(delta)
