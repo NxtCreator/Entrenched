@@ -27,6 +27,6 @@ script = ExtResource("1_0wfyh")
 tile_set = SubResource("TileSet_q2x4p")
 
 [node name="Player" parent="." unique_id=1271989903 node_paths=PackedStringArray("ground") instance=ExtResource("2_sugp2")]
-position = Vector2(320, -16)
+position = Vector2(328, -16)
 script = ExtResource("3_jyhfs")
 ground = NodePath("../Ground")
