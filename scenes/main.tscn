@@ -26,6 +26,7 @@ script = ExtResource("1_0wfyh")
 [node name="Ground" type="TileMapLayer" parent="." unique_id=2004734401]
 tile_set = SubResource("TileSet_q2x4p")
 
-[node name="Player" parent="." unique_id=1271989903 instance=ExtResource("2_sugp2")]
+[node name="Player" parent="." unique_id=1271989903 node_paths=PackedStringArray("ground") instance=ExtResource("2_sugp2")]
 position = Vector2(320, -16)
 script = ExtResource("3_jyhfs")
+ground = NodePath("../Ground")
