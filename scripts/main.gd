@@ -25,5 +25,5 @@ func _generate_row(y: int) -> void:
 		$Ground.set_cell(Vector2i(x, y), source, Vector2i(0, 0))
 
 func _stone_chance(y: int) -> float:
-	return clampf(0.04 + y * 0.0004, 0.04, 0.15)
+	return clampf(0.10 + y * 0.0008, 0.04, 0.22)
 		

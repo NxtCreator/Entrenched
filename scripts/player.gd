@@ -5,14 +5,36 @@ extends CharacterBody2D
 const  SPEED := 55.0
 const GRAVITY := 420.0
 const MAX_FALL := 260.0
-const DIG_DELAY := 0.3
+const DIG_DELAY := 0.1
 const CLIMB_SPEED := 70.0
+const FALL_DEATH := 96.0
 
 var stepping := false
 var step_dir := 0.0
 var climb_target := 0.0
 var hold_time := 0.0
 var last_dir := Vector2i.ZERO
+var falling := false
+var fall_start := 0.0
+var dead := false
+
+func _check_fall() -> void:
+	if is_on_floor() or _on_ladder() or stepping:
+		if falling and is_on_floor() and global_position.y - fall_start >= FALL_DEATH:
+			_die()
+		falling = false
+	elif not falling:
+		falling = true
+		fall_start = global_position.y
+		
+func _die() -> void:
+	dead = true
+	velocity = Vector2.ZERO
+	modulate = Color(1, 0.3, 0.3)
+	
+func _unhandled_input(event: InputEvent) -> void:
+	if dead and event is InputEventKey and event.pressed  and event.keycode == KEY_R:
+		get_tree().reload_current_scene()
 
 
 func _solid(cell: Vector2i) -> bool:
@@ -84,6 +106,9 @@ func _dig(delta: float) -> void:
 		hold_time = 0.0
 	
 func _physics_process(delta: float) -> void:
+	if dead:
+		return
+		
 	if not stepping:
 		if Input.is_action_just_pressed("ui_up"):
 			_step_up()
@@ -102,4 +127,5 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = Input.get_axis("ui_left", "ui_right") * SPEED
 	move_and_slide()
+	_check_fall()
 	_dig(delta)
