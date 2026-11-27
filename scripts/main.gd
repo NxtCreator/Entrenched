@@ -27,8 +27,9 @@ func _generate_row(y: int) -> void:
 		if y > 2:
 			if roll < stone:
 				source = 2
-			elif  roll < stone + ORE_CHANCE:
+			elif roll < stone + ORE_CHANCE:
 				source = 3
+		$Ground.set_cell(Vector2i(x, y), source, Vector2i(0, 0))
 
 func _stone_chance(y: int) -> float:
 	return clampf(0.10 + y * 0.0008, 0.04, 0.22)
