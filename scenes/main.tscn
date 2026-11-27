@@ -44,3 +44,14 @@ tile_set = SubResource("TileSet_q2x4p")
 position = Vector2(328, -16)
 script = ExtResource("3_jyhfs")
 ground = NodePath("../Ground")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1999500761]
+
+[node name="GoldLabel" type="Label" parent="HUD" unique_id=871842236]
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "0"

@@ -8,7 +8,11 @@ var generated_to := 1
 
 func _ready() -> void:
 	_extend_to(AHEAD)
+	$Player.gold_changed.connect(_on_gold_changed)
+	
 
+func _on_gold_changed(total: int):
+	$HUD/GoldLabel.text = str(total)
 
 func _process(delta: float) -> void:
 	var py: int = $Ground.local_to_map($Ground.to_local($Player.global_position)).y
