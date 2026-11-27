@@ -14,12 +14,17 @@ var climb_target := 0.0
 var hold_time := 0.0
 var last_dir := Vector2i.ZERO
 
+
+func _solid(cell: Vector2i) -> bool:
+	var id := ground.get_cell_source_id(cell)
+	return id == 0 or id == 2
+
 func _step_up() -> void:
 	if not (is_on_floor() or _on_ladder()):
 		return
 	var cell := ground.local_to_map(ground.to_local(global_position))
 	var above := cell + Vector2i.UP
-	if ground.get_cell_source_id(above) == 0:
+	if _solid(above):
 		return
 	if ground.get_cell_source_id(cell) != 1:
 		ground.set_cell(cell, 1, Vector2i(0, 0))
@@ -33,7 +38,7 @@ func _step_down() -> void:
 	var cell := ground.local_to_map(global_position)
 	var below := cell + Vector2i.DOWN
 	var src_below := ground.get_cell_source_id(below)
-	if src_below == 0:
+	if _solid(below):
 		return
 	if src_below != 1 and ground.get_cell_source_id(cell) != 1:
 		return
