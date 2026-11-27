@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dpj5d7oqs8y2w" path="res://scripts/player.gd" id="3_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://bu3brhhjgsx37" path="res://assets/ladder.png" id="3_tbgi4"]
 [ext_resource type="Texture2D" uid="uid://dt7cx4qv1ik03" path="res://assets/stone.png" id="4_tefeu"]
+[ext_resource type="Texture2D" uid="uid://brop7fofkdql7" path="res://assets/ore.png" id="5_o6xl0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tbgi4"]
 texture = ExtResource("1_o5qli")
@@ -21,11 +22,17 @@ texture = ExtResource("4_tefeu")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tipki"]
+texture = ExtResource("5_o6xl0")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
 [sub_resource type="TileSet" id="TileSet_q2x4p"]
 physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_tefeu")
 sources/0 = SubResource("TileSetAtlasSource_tbgi4")
 sources/2 = SubResource("TileSetAtlasSource_o6xl0")
+sources/3 = SubResource("TileSetAtlasSource_tipki")
 
 [node name="Main" type="Node2D" unique_id=1343634054]
 script = ExtResource("1_0wfyh")
