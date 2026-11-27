@@ -111,7 +111,6 @@ func _dig(delta: float) -> void:
 		if ground.get_cell_source_id(cell) == 3:
 			gold += 1
 			gold_changed.emit(gold)
-			print(gold)
 		ground.erase_cell(cell)
 		hold_time = 0.0
 	

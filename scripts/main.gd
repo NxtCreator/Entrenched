@@ -14,7 +14,7 @@ func _ready() -> void:
 func _on_gold_changed(total: int):
 	$HUD/GoldLabel.text = str(total)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var py: int = $Ground.local_to_map($Ground.to_local($Player.global_position)).y
 	_extend_to(py + AHEAD)
 
