@@ -49,7 +49,7 @@ func _climb() -> void:
 	velocity.y = 0.0
 	if stepping:
 		velocity.y = step_dir * CLIMB_SPEED
-		if (global_position.y - climb_target) * step_dir >= 0.0:
+		if (global_position.y - climb_target) * step_dir >= -1.0:
 			global_position.y = climb_target
 			stepping = false
 			velocity.y = 0.0
