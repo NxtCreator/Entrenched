@@ -17,6 +17,8 @@ var last_dir := Vector2i.ZERO
 var falling := false
 var fall_start := 0.0
 var dead := false
+signal gold_changed(total: int)
+var gold := 0
 
 func _check_fall() -> void:
 	if is_on_floor() or _on_ladder() or stepping:
@@ -39,7 +41,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _solid(cell: Vector2i) -> bool:
 	var id := ground.get_cell_source_id(cell)
-	return id == 0 or id == 2
+	return id == 0 or id == 2 or id == 3
+	
+func _diggable(cell: Vector2i) -> bool:
+	var id := ground.get_cell_source_id(cell)
+	return id == 0 or id == 3
 
 func _step_up() -> void:
 	if not (is_on_floor() or _on_ladder()):
@@ -97,11 +103,15 @@ func _dig(delta: float) -> void:
 	if direction == Vector2i.ZERO:
 		return
 	var cell := ground.local_to_map(ground.to_local(global_position)) + direction
-	if ground.get_cell_source_id(cell) != 0:
+	if not _diggable(cell):
 		hold_time = 0.0
 		return
 	hold_time += delta
 	if is_new or hold_time >= DIG_DELAY:
+		if ground.get_cell_source_id(cell) == 3:
+			gold += 1
+			gold_changed.emit(gold)
+			print(gold)
 		ground.erase_cell(cell)
 		hold_time = 0.0
 	
