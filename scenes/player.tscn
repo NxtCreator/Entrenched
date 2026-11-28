@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dcalyfdbvs4i1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_62jd7"]
-size = Vector2(14, 14)
+size = Vector2(14, 13)
 
 [node name="Player" type="CharacterBody2D" unique_id=634688996]
 
