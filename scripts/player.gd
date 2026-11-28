@@ -19,6 +19,9 @@ var fall_start := 0.0
 var dead := false
 signal gold_changed(total: int)
 var gold := 0
+var glide_x := false
+var glide_target_x := 0.0
+var glide_dir := 0.0
 
 func _check_fall() -> void:
 	if is_on_floor() or _on_ladder() or stepping:
@@ -118,6 +121,11 @@ func _dig(delta: float) -> void:
 	if is_new or now - last_dig >= DIG_DELAY:
 		_break_cell(cell)
 		last_dig = now
+		
+		if direction.x != 0:
+			glide_target_x = ground.to_global(ground.map_to_local(cell)).x
+			glide_dir = float(direction.x)
+			glide_x = true
 	
 func _physics_process(delta: float) -> void:
 	if dead:
@@ -133,8 +141,14 @@ func _physics_process(delta: float) -> void:
 		_climb()
 	else:
 		velocity.y  = min(velocity.y + GRAVITY * delta, MAX_FALL)
-		
-	if Input.is_action_pressed("ui_down"):
+	if glide_x:
+		velocity.x = glide_dir * SPEED
+		if (global_position.x - glide_target_x) * glide_dir >= -1.0:
+			global_position.x = glide_target_x
+			glide_x = false
+			velocity.x = 0.0
+	
+	elif Input.is_action_pressed("ui_down"):
 		var col := ground.local_to_map(ground.to_local(global_position)).x
 		var center_x := ground.to_global(ground.map_to_local(Vector2i(col, 0))).x
 		velocity.x = clampf((center_x - global_position.x) * 12.0, -SPEED, SPEED)
