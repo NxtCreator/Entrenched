@@ -46,6 +46,12 @@ func _solid(cell: Vector2i) -> bool:
 func _diggable(cell: Vector2i) -> bool:
 	var id := ground.get_cell_source_id(cell)
 	return id == 0 or id == 3
+	
+func _break_cell(cell: Vector2i) -> void:
+	if ground.get_cell_source_id(cell) == 3:
+		gold += 1
+		gold_changed.emit(gold)
+	ground.erase_cell(cell)
 
 func _step_up() -> void:
 	if not (is_on_floor() or _on_ladder()):
@@ -53,7 +59,9 @@ func _step_up() -> void:
 	var cell := ground.local_to_map(ground.to_local(global_position))
 	var above := cell + Vector2i.UP
 	if _solid(above):
-		return
+		if not _diggable(above):
+			return
+		_break_cell(above)
 	if ground.get_cell_source_id(cell) != 1:
 		ground.set_cell(cell, 1, Vector2i(0, 0))
 	climb_target = ground.to_global(ground.map_to_local(above)).y
@@ -108,10 +116,7 @@ func _dig(delta: float) -> void:
 		return
 	hold_time += delta
 	if is_new or hold_time >= DIG_DELAY:
-		if ground.get_cell_source_id(cell) == 3:
-			gold += 1
-			gold_changed.emit(gold)
-		ground.erase_cell(cell)
+		_break_cell(cell)
 		hold_time = 0.0
 	
 func _physics_process(delta: float) -> void:
