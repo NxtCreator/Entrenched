@@ -4,7 +4,7 @@ const WIDTH = 40
 const AHEAD = 30
 const ORE_CHANCE := 0.03
 
-var generated_to := 1
+var generated_to := -1
 
 func _ready() -> void:
 	_extend_to(AHEAD)
