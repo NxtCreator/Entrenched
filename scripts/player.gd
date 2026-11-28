@@ -22,6 +22,7 @@ var gold := 0
 var glide_x := false
 var glide_target_x := 0.0
 var glide_dir := 0.0
+var glide_t := 0.0
 
 func _check_fall() -> void:
 	if is_on_floor() or _on_ladder() or stepping:
@@ -125,6 +126,7 @@ func _dig(delta: float) -> void:
 		if direction.x != 0:
 			glide_target_x = ground.to_global(ground.map_to_local(cell)).x
 			glide_dir = float(direction.x)
+			glide_t = 0.0
 			glide_x = true
 	
 func _physics_process(delta: float) -> void:
@@ -143,6 +145,10 @@ func _physics_process(delta: float) -> void:
 		velocity.y  = min(velocity.y + GRAVITY * delta, MAX_FALL)
 	if glide_x:
 		velocity.x = glide_dir * SPEED
+		glide_t += delta
+		if glide_t > 0.6:
+			glide_x = false
+			
 		if (global_position.x - glide_target_x) * glide_dir >= -1.0:
 			global_position.x = glide_target_x
 			glide_x = false
