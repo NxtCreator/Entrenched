@@ -57,6 +57,8 @@ func _step_up() -> void:
 	if not (is_on_floor() or _on_ladder()):
 		return
 	var cell := ground.local_to_map(ground.to_local(global_position))
+	if cell.y < 0:
+		return
 	var above := cell + Vector2i.UP
 	if _solid(above):
 		if not _diggable(above):
@@ -124,9 +126,9 @@ func _physics_process(delta: float) -> void:
 		return
 		
 	if not stepping:
-		if Input.is_action_just_pressed("ui_up"):
+		if Input.is_action_pressed("ui_up"):
 			_step_up()
-		elif Input.is_action_just_pressed("ui_down"):
+		elif Input.is_action_pressed("ui_down"):
 			_step_down()
 		
 	if _on_ladder() or stepping:
