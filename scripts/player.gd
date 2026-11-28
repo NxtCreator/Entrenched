@@ -5,14 +5,14 @@ extends CharacterBody2D
 const  SPEED := 55.0
 const GRAVITY := 420.0
 const MAX_FALL := 260.0
-const DIG_DELAY := 0.1
+const DIG_DELAY := 0.3
 const CLIMB_SPEED := 70.0
 const FALL_DEATH := 96.0
 
 var stepping := false
 var step_dir := 0.0
 var climb_target := 0.0
-var hold_time := 0.0
+var last_dig := -10.0
 var last_dir := Vector2i.ZERO
 var falling := false
 var fall_start := 0.0
@@ -108,18 +108,16 @@ func _dig(delta: float) -> void:
 	var direction := _dig_dir()
 	var is_new := direction != last_dir
 	last_dir = direction
-	if is_new:
-		hold_time = 0.0
+
 	if direction == Vector2i.ZERO:
 		return
 	var cell := ground.local_to_map(ground.to_local(global_position)) + direction
 	if not _diggable(cell):
-		hold_time = 0.0
 		return
-	hold_time += delta
-	if is_new or hold_time >= DIG_DELAY:
+	var now := Time.get_ticks_msec() / 1000.0
+	if is_new or now - last_dig >= DIG_DELAY:
 		_break_cell(cell)
-		hold_time = 0.0
+		last_dig = now
 	
 func _physics_process(delta: float) -> void:
 	if dead:
